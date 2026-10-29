@@ -1,0 +1,31 @@
+name: BharatCode PR Reviewer
+
+# Trigger this workflow whenever a PR is opened or new code is pushed to it
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the repository code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step 3: Install the packages we downloaded earlier
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Run our script
+      - name: Run PR Reviewer Script
+        run: node reviewer.js
+        env:
+          # GitHub automatically provides this token to read PR data
+          INPUT_GITHUB-TOKEN: ${{ secrets.GITHUB_TOKEN }}
