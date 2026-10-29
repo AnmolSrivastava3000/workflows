@@ -1,42 +1,50 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+
+import * as core from '@actions/core';
+import * as github from '@actions/github';
 
 async function run() {
   try {
-    // 1. Get the standard GitHub token provided by Actions
-    const token = core.getInput('github-token', { required: true });
+    // 1. Get GitHub token provided by Actions
+    const token = core.getInput('github-token', {
+      required: true
+    });
+
     const octokit = github.getOctokit(token);
 
-    // 2. Check the context to ensure this is actually a Pull Request
+    // 2. Verify that this is a Pull Request event
     const context = github.context;
+
     if (context.eventName !== 'pull_request') {
-      core.info('This event is not a pull request. Skipping review.');
+      core.info('Not a pull request. Skipping review.');
       return;
     }
 
-    // 3. Extract repository and PR details
+    // 3. Extract PR details
     const prNumber = context.payload.pull_request.number;
     const owner = context.repo.owner;
     const repo = context.repo.repo;
 
-    core.info(`Fetching diff for PR #${prNumber} in ${owner}/${repo}`);
+    core.info(
+      `Fetching diff for PR #${prNumber} in ${owner}/${repo}`
+    );
 
-    // 4. Fetch the raw diff from GitHub's API
+    // 4. Fetch raw PR diff
     const { data: diff } = await octokit.rest.pulls.get({
       owner,
       repo,
       pull_number: prNumber,
       mediaType: {
-        format: 'diff' // This tells GitHub to return raw code changes, not JSON
+        format: 'diff'
       }
     });
 
-    // 5. Print the diff to the console to prove we got it
+    // 5. Print diff in GitHub Actions logs
     core.info('--- RAW PR DIFF ---');
     core.info(diff);
-    
+
+    core.info('Successfully fetched PR diff!');
+
   } catch (error) {
-    // If anything fails, mark the action as failed with a red X
     core.setFailed(`Review failed: ${error.message}`);
   }
 }
