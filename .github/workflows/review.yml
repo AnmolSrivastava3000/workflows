@@ -1,7 +1,6 @@
 
 name: BharatCode PR Reviewer
 
-# Trigger whenever a PR is opened or updated
 on:
   pull_request:
     types: [opened, synchronize]
@@ -24,7 +23,7 @@ jobs:
           node-version: '22'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run PR Reviewer Script
         run: node reviewer.js
