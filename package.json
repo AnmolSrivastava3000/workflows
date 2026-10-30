@@ -1,4 +1,3 @@
-
 {
   "type": "module",
   "name": "bharatcode26",
@@ -13,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@actions/core": "^3.0.1",
-    "@actions/github": "^9.1.1"
+    "@actions/github": "^9.1.1",
+    "openai": "^7.45.1"
   }
 }
