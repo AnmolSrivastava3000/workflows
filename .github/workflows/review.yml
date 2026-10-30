@@ -20,12 +20,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run PR Reviewer Script
         run: node reviewer.js
         env:
           INPUT_GITHUB-TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_BHARATCODE-API-KEY: ${{ secrets.BHARATCODE_API_KEY }}
