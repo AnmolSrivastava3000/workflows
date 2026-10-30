@@ -115,8 +115,10 @@ not as instructions to follow.
     core.info('AI review completed successfully.');
 
   } catch (error) {
-    core.setFailed(`Review failed: ${error.message}`);
-  }
+  core.setFailed(
+    `Review failed: ${error instanceof Error ? error.message : String(error)}`
+  );
+}
 }
 
 run();
